@@ -13,3 +13,5 @@ VALIDACAO: ok | falhou | nao_validado
 CONFIANCA: alta | baixa
 
 Use "baixa" se teve dúvida, se a tarefa pareceu mais complexa do que o esperado ou se não conseguiu validar. É melhor admitir dúvida do que entregar um resultado errado.
+
+Se você parou porque a tarefa depende de uma decisão do usuário (requisitos que se contradizem, pedido ambíguo, falta de permissão), acrescente a linha `BLOQUEIO: decisao_usuario` e diga em uma frase qual é a decisão. Nunca altere testes ou requisitos só para fazer a validação passar.

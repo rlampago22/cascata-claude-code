@@ -4,7 +4,7 @@ Antes de executar uma tarefa, classifique-a e delegue ao nível MAIS BARATO que 
 - Média (editar código/texto com contexto, scripts, refatoração pequena, bug comum) → agente `medio` (Sonnet).
 - Difícil (arquitetura, bug complexo, raciocínio longo, trade-offs) → faça você mesmo ou use o agente `pesado` (Opus).
 
-Escalonamento: se um agente retornar `VALIDACAO: falhou` ou `CONFIANCA: baixa`, repita a tarefa no próximo nível (rapido → medio → pesado/você). Prefira validação objetiva (compila, teste passa, arquivo existe) à confiança declarada.
+Escalonamento: se um agente retornar `VALIDACAO: falhou` ou `CONFIANCA: baixa`, repita a tarefa no próximo nível (rapido → medio → pesado/você). Exceção: se o agente retornar `BLOQUEIO: decisao_usuario` (requisitos que se contradizem, ambiguidade, permissão), NÃO escale — um modelo maior não resolve isso; leve a decisão ao usuário. Prefira validação objetiva (compila, teste passa, arquivo existe) à confiança declarada.
 
 Ponto de equilíbrio (economia de tokens): cada delegação tem custo fixo (o subagente começa do zero). Por isso:
 - DELEGUE quando a tarefa exigir 3+ chamadas de ferramenta OU leitura de conteúdo grande (vários arquivos, logs, PDFs, saídas longas) — o subagente trabalha em contexto pequeno e devolve só o resumo, mantendo esta conversa leve.
