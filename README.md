@@ -18,7 +18,22 @@ tarefa → Opus (roteador) ─┬─ simples → rapido (Haiku)  ─┐
 
 - Todo agente termina com `VALIDACAO: ok | falhou | nao_validado` e `CONFIANCA: alta | baixa`.
 - Se voltar `falhou` ou `baixa`, a mesma tarefa sobe para o próximo nível.
+- Se a tarefa depende de uma decisão sua (requisitos que se contradizem, pedido ambíguo, falta de permissão), o agente para e responde `BLOQUEIO: decisao_usuario`. Nesse caso a tarefa **não** sobe de nível: a pergunta vem para você. E nenhum agente pode mudar um teste só para fazê-lo passar.
 - **Delegar tem custo fixo**, porque o subagente começa do zero. Por isso, tarefa minúscula (1–2 passos) fica com quem já está nela, e só tarefa com 3+ passos ou com leitura grande é delegada.
+
+## Resultados do teste (06/11/2026)
+
+Os 3 níveis rodaram as mesmas 4 tarefas, 2 vezes cada (24 execuções): somar uma planilha, achar as chamadas de uma função cheia de pegadinhas, corrigir um bug e uma armadilha (um teste errado de propósito).
+
+| Nível | Acertos | Tokens por tarefa | Custo das 8 execuções (preço de API) |
+| --- | --- | --- | --- |
+| `rapido` (Haiku) | 8/8 | ~36 mil | US$ 0,017 |
+| `medio` (Sonnet) | 8/8 | ~32 mil | US$ 0,26 |
+| `pesado` (Opus) | 8/8 | ~32 mil | US$ 0,52 |
+
+- **Mesmo resultado, ~30x mais barato:** os tokens empatam e o que muda é o preço de cada token.
+- **Na armadilha, 6/6 execuções pararam e pediram uma decisão**, sem editar o teste. Isso inclui o Haiku.
+- São tarefas pequenas e bem definidas. Em tarefas difíceis, o nível de cima continua sendo a escolha certa.
 
 ## Instalação (2 minutos)
 
@@ -44,6 +59,7 @@ tarefa → Opus (roteador) ─┬─ simples → rapido (Haiku)  ─┐
 ## Ajustes
 
 - Quer um nível mais rígido? Edite o `description` de cada agente, que é o texto que o roteador lê para decidir.
+- Todo agente tem a linha `tools:`. Sem ela, o agente herda todas as ferramentas da sessão (incluindo conectores MCP) e cada chamada carrega muito mais contexto. No teste, o `pesado` caiu de ~62 mil para ~11 mil tokens por chamada só com essa linha.
 - O `rapido` só tem ferramentas de leitura (sem `Edit`/`Write`) de propósito: tarefa que edita arquivo já é nível 2.
 - O registro `[cascata]` mostra o que foi delegado. Se algo sempre escala, mude a regra para mandar direto ao nível de cima.
 
